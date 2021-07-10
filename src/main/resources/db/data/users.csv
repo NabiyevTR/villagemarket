@@ -1,0 +1,4 @@
+login,password,first_name,last_name,birth_date,reg_date,gender
+user1,pass1,John,Doe,1999-01-08,2020-01-08,m
+user2,pass2,Ivan,Ivanov,1999-01-08,2020-01-08,m
+user3,pass3,Kate,Smith,1999-01-08,2020-01-08,f
