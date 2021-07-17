@@ -31,9 +31,9 @@
 
             <column name="last_name" type="varchar(50)"/>
 
-            <column name="birth_date" type="date"/>
+            <column name="birth_date" type="datetime"/>
 
-            <column name="reg_date" type="date"/>
+            <column name="reg_date" type="datetime"/>
 
             <column name="gender" type="char"/>
 
@@ -206,7 +206,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="date_set" type="date">
+            <column name="date_set" type="datetime">
                 <constraints nullable="false"/>
             </column>
 
@@ -244,7 +244,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="order_date" type="date">
+            <column name="order_date" type="datetime">
                 <constraints nullable="false"/>
             </column>
 

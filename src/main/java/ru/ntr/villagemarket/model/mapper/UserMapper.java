@@ -12,7 +12,7 @@ public class UserMapper {
 
         return User.builder()
                 .id(userDto.getId())
-                .login(userDto.getLogin())
+                .username(userDto.getLogin())
                 .password(userDto.getPassword())
                 .roles(userDto.getRoles())
                 .build();
@@ -22,7 +22,7 @@ public class UserMapper {
 
         return UserDto.builder()
                 .id(user.getId())
-                .login(user.getLogin())
+                .login(user.getUsername())
                 .password(user.getPassword())
                 .roles(user.getRoles())
                 .build();

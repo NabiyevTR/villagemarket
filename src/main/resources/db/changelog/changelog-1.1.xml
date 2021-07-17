@@ -1,0 +1,157 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- USERS -->
+
+    <changeSet id="add email and phone number" author="NTR">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <and>
+                    <columnExists tableName="users" columnName="email"/>
+                </and>
+                <and>
+                    <columnExists tableName="users" columnName="phone_number"/>
+                </and>
+            </not>
+        </preConditions>
+
+        <addColumn catalogName="cat"
+                   schemaName=""
+                   tableName="users">
+            <column
+                    afterColumn="login"
+                    name="phone_number"
+                    type="varchar(20)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column afterColumn="login"
+                    name="email"
+                    type="varchar(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+        </addColumn>
+
+        <rollback>
+            <dropColumn catalogName="cat"
+                        schemaName=""
+                        tableName="users">
+                <column name="email"/>
+                <column name="phone_number"/>
+            </dropColumn>
+        </rollback>
+
+    </changeSet>
+
+    <changeSet id="set unique constrain in users_roles table" author="NTR">
+
+        <!--  <preConditions onFail="MARK_RAN">
+              <not>
+
+              </not>
+          </preConditions>-->
+
+        <addUniqueConstraint
+                columnNames="user_id, role_id"
+                constraintName="cs_users_roles"
+                tableName="users_roles"/>
+
+        <rollback>
+            <dropUniqueConstraint
+                    tableName="users_roles"
+                    constraintName="cs_users_roles"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="delete id column from users_roles" author="NTR">
+
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="users_roles" columnName="id"/>
+        </preConditions>
+
+        <dropColumn tableName="users_roles" columnName="id"/>
+
+        <rollback>
+            <addColumn catalogName="cat"
+                       schemaName=""
+                       tableName="users_roles">
+                <column name="id" autoIncrement="true" type="int">
+                    <constraints primaryKey="true"/>
+                </column>
+            </addColumn>
+        </rollback>
+
+    </changeSet>
+
+    <changeSet id="more chars for password" author="NTR">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="users" columnName="password"/>
+        </preConditions>
+        <modifyDataType tableName="users" columnName="password" newDataType="varchar(100)"/>
+
+        <rollback>
+            <modifyDataType tableName="users" columnName="password" newDataType="varchar(20)"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="set default value for gender" author="NTR">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="users" columnName="gender"/>
+        </preConditions>
+        <addDefaultValue tableName="users" columnName="gender" defaultValue="u"/>
+        <rollback>
+           <dropDefaultValue tableName="users" columnName="gender"/>
+        </rollback>
+    </changeSet>
+
+
+    <!-- PRODUCTS, PRICES, CATEGORIES -->
+
+
+    <changeSet id="add unique constraint to field name" author="NTR">
+
+        <!--  <preConditions onFail="MARK_RAN">
+          </preConditions>-->
+
+        <addUniqueConstraint
+                columnNames="name"
+                constraintName="cs_category_name"
+                tableName="categories"/>
+
+        <rollback>
+            <dropUniqueConstraint
+                    tableName="categories"
+                    constraintName="cs_category_name"/>
+        </rollback>
+
+    </changeSet>
+
+    <changeSet id="change login column name" author="NTR">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="users" columnName="login"/>
+        </preConditions>
+        <renameColumn catalogName="cat"
+                      newColumnName="username"
+                      oldColumnName="login"
+                      schemaName="public"
+                      tableName="users"/>
+    <rollback>
+        <renameColumn catalogName="cat"
+                      newColumnName="login"
+                      oldColumnName="username"
+                      schemaName="public"
+                      tableName="users"/>
+    </rollback>
+    </changeSet>
+
+    <!-- ORDERS -->
+
+
+    <!-- CART -->
+
+</databaseChangeLog>

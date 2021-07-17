@@ -1,19 +1,20 @@
-package ru.ntr.villagemarket.controller;
+package ru.ntr.villagemarket.controller.cms;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.ntr.villagemarket.model.dto.ProductDto;
 import ru.ntr.villagemarket.model.service.ProductService;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/cms/product")
 @Slf4j
 @RequiredArgsConstructor
-public class ProductController {
+@Secured({"ROLE_SUPERADMIN", "ROLE_ADMIN", "ROLE_MANAGER"})
+public class CMSProductController {
 
     private final ProductService productService;
 
@@ -28,11 +29,16 @@ public class ProductController {
         return productService.findById(id);
     }
 
+    @PostMapping("")
+    public int create(@RequestBody ProductDto productDto) {
+        productService.save(productDto);
+        return HttpStatus.OK.value();
+    }
 
-    @PostMapping()
-    public ProductDto create(@RequestBody ProductDto productDto) {
-        return productService.save(productDto);
-
+    @PatchMapping(value = "/{id}/edit")
+    public int updateProduct(@RequestBody ProductDto productDto, @PathVariable("id") int id) {
+        productService.save(productDto);
+        return HttpStatus.OK.value();
     }
 
     @DeleteMapping("/{id}")
