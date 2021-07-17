@@ -4,57 +4,66 @@ package ru.ntr.villagemarket.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import ru.ntr.villagemarket.model.service.SecurityService;
+import ru.ntr.villagemarket.model.service.UserService;
 
-
-//TODO Configure Spring Security
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
-public class SecurityConfiguration  extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
+
+    private final UserService userService;
+    private final SecurityService securityService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-
-        http.authorizeRequests()
-                .antMatchers("/**").permitAll()
-                //.antMatchers("/", "/products").permitAll()
-                //.antMatchers("/resources/**").permitAll()
+        http
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .formLogin().permitAll();
+                .cors()
+                .and()
+                .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .authorizeRequests()
+                .antMatchers("/api/cms/users/**").hasAnyAuthority("ROLE_SUPERADMIN", "ROLE_ADMIN")
+                .antMatchers("api/cms/**").hasAnyRole("ROLE_SUPERADMIN", "ROLE_ADMIN", "ROLE_MANAGER")
+                .anyRequest().permitAll()
+                .and()
+                .addFilterBefore(new CustomFilter(securityService, userService), BasicAuthenticationFilter.class)
+        ;
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry
+                .addMapping("/api/**")
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS");
     }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-/*    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-        auth.setUserDetailsService(userService);
-        auth.setPasswordEncoder(passwordEncoder());
-
-        AbstractSecurityWebApplicationInitializer s = new AbstractSecurityWebApplicationInitializer() {
-            @Override
-            protected boolean enableHttpSessionEventPublisher() {
-                return super.enableHttpSessionEventPublisher();
-            }
-        };
-
-        return auth;
-    }*/
-
-
 
 
 }
