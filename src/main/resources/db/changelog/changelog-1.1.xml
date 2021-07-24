@@ -52,7 +52,6 @@
 
         <!--  <preConditions onFail="MARK_RAN">
               <not>
-
               </not>
           </preConditions>-->
 
@@ -105,7 +104,7 @@
         </preConditions>
         <addDefaultValue tableName="users" columnName="gender" defaultValue="u"/>
         <rollback>
-           <dropDefaultValue tableName="users" columnName="gender"/>
+            <dropDefaultValue tableName="users" columnName="gender"/>
         </rollback>
     </changeSet>
 
@@ -140,13 +139,13 @@
                       oldColumnName="login"
                       schemaName="public"
                       tableName="users"/>
-    <rollback>
-        <renameColumn catalogName="cat"
-                      newColumnName="login"
-                      oldColumnName="username"
-                      schemaName="public"
-                      tableName="users"/>
-    </rollback>
+        <rollback>
+            <renameColumn catalogName="cat"
+                          newColumnName="login"
+                          oldColumnName="username"
+                          schemaName="public"
+                          tableName="users"/>
+        </rollback>
     </changeSet>
 
     <!-- ORDERS -->

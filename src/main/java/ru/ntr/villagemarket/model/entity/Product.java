@@ -31,6 +31,7 @@ public class Product {
     private List<Price> prices;
 
 
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "orders_products",

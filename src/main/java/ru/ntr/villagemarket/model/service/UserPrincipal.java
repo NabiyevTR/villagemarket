@@ -1,22 +1,25 @@
 package ru.ntr.villagemarket.model.service;
 
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import ru.ntr.villagemarket.model.entity.Role;
 import ru.ntr.villagemarket.model.entity.User;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Data
 @RequiredArgsConstructor
 public class UserPrincipal implements UserDetails {
 
     private static final String ROLE_PREFIX = "ROLE_";
 
-    private final User user;
+    private final  User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

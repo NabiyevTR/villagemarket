@@ -9,7 +9,7 @@ public interface ProductService {
 
     ProductDto findById(int id);
 
-    ProductDto save(ProductDto productDto);
+    void save(ProductDto productDto);
 
     void delete(int id);
 }

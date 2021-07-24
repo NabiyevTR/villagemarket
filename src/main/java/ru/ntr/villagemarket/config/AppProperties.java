@@ -1,7 +1,9 @@
 package ru.ntr.villagemarket.config;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -13,14 +15,12 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Properties;
 
+@Component
 public final class AppProperties {
 
-    //ADMIN
-    //username ADMIN
+    //SUPERADMIN
+    //username SUPERADMIN
     //password 123456
-
-
-    private static AppProperties appProperties;
 
 
     @Getter
@@ -31,8 +31,8 @@ public final class AppProperties {
 
     private static final String RESOURCE_PATH = new File("src/main/resources").getAbsolutePath();
     private static final String APP_CONFIG_PATH = "app.properties";
-    private static final String PUBLIC_KEY_PATH = "/keypair/public.txt";
-    private static final String PRIVATE_KEY_PATH = "/keypair/private.txt";
+    private static final String PUBLIC_KEY_PATH = "/keypair/id_rsa_villagemarket.pub";
+    private static final String PRIVATE_KEY_PATH = "/keypair/id_rsa_villagemarket";
 
     @SneakyThrows
     private AppProperties() {
@@ -87,14 +87,5 @@ public final class AppProperties {
     public void loadKeyPair() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
         keyPair = new KeyPair(loadPublicKey(), loadPrivateKey());
     }
-
-    public static AppProperties getInstance() {
-        if (appProperties == null) {
-            appProperties = new AppProperties();
-        }
-        return appProperties;
-    }
-
-
 }
 

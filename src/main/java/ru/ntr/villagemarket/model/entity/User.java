@@ -4,13 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "public")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Data
 @Builder
 @NoArgsConstructor
@@ -62,7 +64,11 @@ public class User {
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"),
-            foreignKey = @ForeignKey(name = "fk_orders_products_orders")
+            foreignKey = @ForeignKey(name = "fk_users_roles_user")
     )
     private List<Role> roles;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    Cart cart;
+
 }

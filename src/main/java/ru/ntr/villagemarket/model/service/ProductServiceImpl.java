@@ -31,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto save(ProductDto productDto) {
+    public void save(ProductDto productDto) {
         Product product = productRepository.save(ProductMapper.toProduct(productDto));
 
         priceRepository.save(Price.builder()
@@ -39,8 +39,6 @@ public class ProductServiceImpl implements ProductService {
                 .productId(product.getId())
                 .date(new Date())
                 .build());
-
-        return productDto;
     }
 
     @Override
