@@ -38,6 +38,10 @@ public class CartMapper {
 
         List<CartItem> cart = new ArrayList<>();
 
+        if (productList == null) {
+            return cart;
+        }
+
         for (Product product : productList) {
 
             Optional<CartItem> optional = cart.stream().filter(e -> e.getId() == product.getId()).findFirst();
