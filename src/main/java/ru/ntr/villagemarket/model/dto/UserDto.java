@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import ru.ntr.villagemarket.model.entity.Role;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -15,24 +16,32 @@ import java.util.List;
 @AllArgsConstructor
 public class UserDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
-    @Column(name = "login")
-    private String login;
+    private String username;
 
-    @Column(name = "password")
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"),
-            foreignKey = @ForeignKey(name = "fk_orders_products_orders")
-    )
-    private List<Role> roles;
+    private String firstName;
+
+    private String lastName;
+
+    private Date birthDate;
+
+    private Date regDate;
+
+    private char gender;
+
+    private boolean isBlocked;
+
+    private String address;
+
+    private String comments;
+
+    private String phoneNumber;
+
+    private String email;
+
+    private List<String> roles;
 
 }

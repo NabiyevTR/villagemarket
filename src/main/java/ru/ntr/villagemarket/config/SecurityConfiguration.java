@@ -38,26 +38,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers("/api/cms/users/**").hasAnyAuthority("ROLE_SUPERADMIN", "ROLE_ADMIN")
-                .antMatchers("api/cms/**").hasAnyRole("ROLE_SUPERADMIN", "ROLE_ADMIN", "ROLE_MANAGER")
+                .antMatchers("api/cms/users/**").hasAnyAuthority("ROLE_SUPERADMIN", "ROLE_ADMIN")
+                .antMatchers("api/cms/**").hasAnyRole("ROLE_SUPERADMIN", "ROLE_MANAGER")
+                .antMatchers("api/cart/**").authenticated()
+                .antMatchers("api/cart").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new CustomFilter(securityService, userService), BasicAuthenticationFilter.class)
         ;
     }
 
-    @Override
     @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
     }
-
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry
                 .addMapping("/api/**")
-                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS");
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+        ;
     }
 
     @Bean

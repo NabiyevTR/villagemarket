@@ -19,11 +19,32 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private int id;
+
+    @Column(name = "first_name")
+    private String customerFirstName;
+
+    @Column(name = "last_name")
+    private String customerLastName;
+
+    @Column(name = "address")
+    private String customerAddress;
+
+    @Column(name = "email")
+    private String customerEmail;
+
+    @Column(name = "phone_number")
+    private String customerPhoneNumber;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "status_id")
+    private OrderStatus status;
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

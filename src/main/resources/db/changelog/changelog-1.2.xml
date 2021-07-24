@@ -1,0 +1,205 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- USERS -->
+
+
+    <!-- PRODUCTS, PRICES, CATEGORIES -->
+
+
+    <!-- ORDERS -->
+
+    <changeSet id="delete order_date from orders table" author="NTR">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="orders" columnName="order_date"/>
+        </preConditions>
+
+        <dropColumn tableName="orders" columnName="order_date"/>
+
+        <rollback>
+            <addColumn tableName="orders" columnName="order_date">
+                <column type="datetime"/>
+            </addColumn>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="add status_id, address, phone number, email, first name, last name to orders table" author="NTR">
+        <preConditions onFail="MARK_RAN">
+           <tableExists tableName="orders" />
+        </preConditions>
+
+        <addColumn tableName="orders">
+            <column name="first_name" type="varchar(50)"/>
+            <column name="last_name" type="varchar(50)"/>
+            <column name="address" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_number" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(50)"/>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="orders"
+                                 baseColumnNames="status_id"
+                                 constraintName="fk_orders_orders_status"
+                                 referencedTableName="orders_status"
+                                 referencedColumnNames="id"/>
+
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="orders" constraintName="fk_orders_orders_status"/>
+            <dropColumn tableName="status_id"/>
+            <dropColumn tableName="first_name"/>
+            <dropColumn tableName="last_name"/>
+            <dropColumn tableName="address"/>
+            <dropColumn tableName="phone_number"/>
+            <dropColumn tableName="email"/>
+        </rollback>
+
+    </changeSet>
+
+    <changeSet id="create orders_status table" author="NTR">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="orders_status"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="orders_status">
+
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="orders_status"/>
+        </rollback>
+
+    </changeSet>
+
+    <changeSet id="create orders_history table" author="NTR">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="orders_history"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="orders_history">
+
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="order_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comments" type="clob">
+
+            </column>
+
+
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="orders_history"
+                                 baseColumnNames="order_id"
+                                 constraintName="fk_orders_history_orders"
+                                 referencedTableName="orders"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="orders_history"
+                                 baseColumnNames="status_id"
+                                 constraintName="fk_orders_history_orders_status"
+                                 referencedTableName="orders_status"
+                                 referencedColumnNames="id"/>
+
+        <rollback>
+            <dropTable tableName="orders_history"/>
+        </rollback>
+    </changeSet>
+
+    <!-- CART -->
+
+    <changeSet id="create carts table" author="NTR">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="carts"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="carts">
+
+            <column name="user_id" type="int">
+                <constraints primaryKey="true"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="carts"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_carts_users"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+
+        <rollback>
+            <dropTable tableName="carts"/>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="create carts_products table" author="NTR">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="carts_products"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="carts_products">
+
+            <column name="cart_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="product_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="carts_products"
+                                 baseColumnNames="cart_id"
+                                 constraintName="fk_carts_products_cart"
+                                 referencedTableName="carts"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="carts_products"
+                                 baseColumnNames="product_id"
+                                 constraintName="fk_carts_product_product"
+                                 referencedTableName="products"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropTable tableName="carts_products"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

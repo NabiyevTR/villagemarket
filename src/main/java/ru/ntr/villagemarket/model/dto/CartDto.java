@@ -1,13 +1,19 @@
 package ru.ntr.villagemarket.model.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import ru.ntr.villagemarket.model.helpers.CartItem;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 
 @Data
-/*@Builder
-@NoArgsConstructor
-@AllArgsConstructor*/
+@Builder
 public class CartDto {
+
+    @Builder.Default
+    private List<CartItem> cart = new ArrayList<>();
+
 }

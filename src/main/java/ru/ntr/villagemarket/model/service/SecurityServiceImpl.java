@@ -19,9 +19,11 @@ import java.util.Date;
 public class SecurityServiceImpl implements SecurityService {
 
     private final KeyPair keyPair;
+    private final AppProperties appProperties;
 
-    public SecurityServiceImpl() throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-       keyPair = AppProperties.getInstance().getKeyPair();
+    public SecurityServiceImpl(AppProperties appProperties) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+        this.appProperties = appProperties;
+        keyPair =appProperties.getKeyPair();
     }
 
 
@@ -42,7 +44,7 @@ public class SecurityServiceImpl implements SecurityService {
             return Jwts.builder()
                     .setIssuer(authenticate.getName())
                     .setIssuedAt(new Date())
-                    .setExpiration(new Date(new Date().getTime() + 3_600_000))
+                    .setExpiration(new Date(new Date().getTime() + 3_600_000_00))
                     .claim("name", authenticate.getName())
                     .signWith(keyPair.getPrivate())
                     .compact();

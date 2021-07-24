@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -35,15 +34,16 @@ public class CustomFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (header != null && header.startsWith(AUTH_PREFIX)) {
-            final String token = header.replaceFirst(AUTH_PREFIX, "");
+        try {
 
-            String username = "";
+            final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-            try {
-                username = securityService.verifyJwt(token);
+            if (header != null && header.startsWith(AUTH_PREFIX)) {
+
+                final String token = header.replaceFirst(AUTH_PREFIX, "");
+
+                String username = securityService.verifyJwt(token);
 
 
                 final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
@@ -52,25 +52,19 @@ public class CustomFilter extends OncePerRequestFilter {
                                 userService.loadUserByUsername(username).getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            } catch (ExpiredJwtException e) {
-                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token has expired.");
-                 response.setHeader("message", "Token has expired.");
-                return;
-              //  responseError(response, "Token has expired");
-            } catch (JwtException e) {
-                ((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid token.");
-                response.setHeader("message", "Invalid token.");
-               // responseError(response, "Invalid token");
-                return;
             }
-
-
-
-
+        } catch (ExpiredJwtException e) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token has expired.");
+            response.setHeader("message", "Token has expired.");
+            return;
+        } catch (JwtException e) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid token.");
+            response.setHeader("message", "Invalid token.");
+            return;
         }
 
-            filterChain.doFilter(request, response);
 
+        filterChain.doFilter(request, response);
 
 
     }

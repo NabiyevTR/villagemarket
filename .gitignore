@@ -38,6 +38,4 @@ mvnw
 
 mvnw.cmd
 
-src/main/resources/keypair/private.txt
-
-src/main/resources/keypair/public.txt
+src/main/resources/keypair/
