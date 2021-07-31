@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CartItem {
+public class ProductItem {
     private int id;
     private String name;
     private double price;

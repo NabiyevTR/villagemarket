@@ -13,6 +13,11 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getRoleByName(String roleName) {
+        //TODO DELETE FOR TEST
+        Role role = roleRepository.findByRole(roleName);
+        System.out.println("Role name: " + roleName);
+        System.out.println("Role: "+ role);
+
         return roleRepository.findByRole(roleName);
     }
 }

@@ -1,12 +1,10 @@
 package ru.ntr.villagemarket.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
-import ru.ntr.villagemarket.model.helpers.CartItem;
+import ru.ntr.villagemarket.model.helpers.ProductItem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -15,8 +13,7 @@ import java.util.List;
 
 public class CartDto {
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Builder.Default
-    private List<CartItem> cart = new ArrayList<>();
+    private List<ProductItem> cart = new ArrayList<>();
 
 }

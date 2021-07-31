@@ -1,10 +1,9 @@
 package ru.ntr.villagemarket.model.mapper;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import ru.ntr.villagemarket.model.dto.UserDto;
+import ru.ntr.villagemarket.model.dto.user.UserDto;
 import ru.ntr.villagemarket.model.entity.Role;
 import ru.ntr.villagemarket.model.entity.User;
 import ru.ntr.villagemarket.model.service.RoleService;

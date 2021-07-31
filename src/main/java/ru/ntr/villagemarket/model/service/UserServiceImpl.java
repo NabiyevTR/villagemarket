@@ -5,7 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.ntr.villagemarket.model.dto.UserDto;
+import ru.ntr.villagemarket.model.dto.user.UserDto;
 import ru.ntr.villagemarket.model.entity.User;
 import ru.ntr.villagemarket.model.mapper.UserMapper;
 import ru.ntr.villagemarket.model.repository.UserRepository;
@@ -32,11 +32,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findCurrent() {
-        return userMapper.fromUser(userRepository.findUserById(getCurrentUserId()));
+        return userMapper.fromUser(userRepository.findUserById(getCurrentUser().getId()));
     }
 
     @Override
     public void save(UserDto userDto) {
+
         userRepository.save(userMapper.toUser(userDto));
     }
 
@@ -54,10 +55,21 @@ public class UserServiceImpl implements UserService {
         return new UserPrincipal(user);
     }
 
-    private int getCurrentUserId() {
-        return ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                .getUser()
-                .getId();
+    @Override
+    public UserDto showCurrentUser() {
+        return userMapper.fromUser(getCurrentUser());
+    }
+
+    @Override
+    public User getCurrentUser() {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String username = principal instanceof UserDetails
+                ? ((UserDetails)principal).getUsername()
+                : principal.toString();
+
+        return userRepository.findUserByUsername(username);
     }
 
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.ntr.villagemarket.model.dto.CartDto;
 import ru.ntr.villagemarket.model.entity.Cart;
 import ru.ntr.villagemarket.model.entity.User;
-import ru.ntr.villagemarket.model.mapper.CartMapper;
+import ru.ntr.villagemarket.model.mapper.OrderProductsMapper;
 import ru.ntr.villagemarket.model.repository.CartRepository;
 import ru.ntr.villagemarket.model.repository.UserRepository;
 
@@ -15,21 +15,25 @@ import ru.ntr.villagemarket.model.repository.UserRepository;
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
-    private final CartMapper cartMapper;
+    private final OrderProductsMapper orderProductsMapper;
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
 
     @Override
-    public CartDto get() {
-        return cartMapper.fromCart(cartRepository.getById(getCartId()));
+    public CartDto getCartDto() {
+        return orderProductsMapper.fromCart(cartRepository.getById(getCartId()));
+    }
+
+    @Override
+    public Cart getCart() {
+        return cartRepository.getById(getCartId());
     }
 
     @Override
     public void overwrite(CartDto cartDto) {
-        /*cartRepository.deleteById(getCartId());
-        cartRepository.flush();*/
-        cartRepository.save(cartMapper.toCart(getCartId(), cartDto));
+        cartRepository.save(orderProductsMapper.toCart(getCartId(), cartDto));
 
     }
 
@@ -45,25 +49,17 @@ public class CartServiceImpl implements CartService {
 
     private int getCartId() {
 
-        final Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = userService.getCurrentUser();
 
-        final String username = principal instanceof UserDetails
-                ? ((UserDetails) principal).getUsername()
-                : principal.toString();
+        Cart cart = currentUser.getCart();
 
-        final User user = userRepository.findUserByUsername(username);
-        Cart cart = user.getCart();
-
+        //create new cart if cart is null
         if (cart == null) {
-            cart = cartRepository.saveAndFlush(
+            cart = cartRepository.save(
                     Cart.builder()
-                            .id(user.getId())
+                            .id(currentUser.getId())
                             .build());
-
         }
-
         return cart.getId();
-
-
     }
 }

@@ -34,6 +34,10 @@ public final class AppProperties {
     private static final String PUBLIC_KEY_PATH = "/keypair/id_rsa_villagemarket.pub";
     private static final String PRIVATE_KEY_PATH = "/keypair/id_rsa_villagemarket";
 
+
+    public static final int DAYS_FOR_DELIVERY = 2;
+
+
     @SneakyThrows
     private AppProperties() {
 
