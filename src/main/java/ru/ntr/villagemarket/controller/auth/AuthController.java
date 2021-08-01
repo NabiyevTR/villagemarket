@@ -31,18 +31,18 @@ public class AuthController {
                     )
             );
 
-        ResponseAuthDto responseAuthDto = new ResponseAuthDto();
-        responseAuthDto.setUsername(authDto.getUsername());
-        responseAuthDto.setAccessToken(securityService.createJwtToken(authenticate));
-        responseAuthDto.setGrantedAuthorities( userService.loadUserByUsername(authDto.getUsername()).getAuthorities());
+            ResponseAuthDto responseAuthDto = new ResponseAuthDto();
+            responseAuthDto.setUsername(authDto.getUsername());
+            responseAuthDto.setAccessToken(securityService.createJwtToken(authenticate));
+            responseAuthDto.setGrantedAuthorities(userService.loadUserByUsername(authDto.getUsername()).getAuthorities());
 
-        return responseAuthDto;
+            return responseAuthDto;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return  null;
+        return null;
 
     }
 }

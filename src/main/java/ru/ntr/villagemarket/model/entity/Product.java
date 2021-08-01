@@ -30,8 +30,6 @@ public class Product {
             mappedBy = "product")
     private List<Price> prices;
 
-
-
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "orders_products",
@@ -47,5 +45,8 @@ public class Product {
                 .map(Price::getCost)
                 .orElse(0.0);
     }
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<OrderedProduct> orderedProducts;
 
 }

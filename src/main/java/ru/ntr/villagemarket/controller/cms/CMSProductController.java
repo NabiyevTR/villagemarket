@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/api/cms/product")
 @Slf4j
 @RequiredArgsConstructor
-@Secured({"ROLE_SUPERADMIN", "ROLE_ADMIN", "ROLE_MANAGER"})
+@Secured({"ROLE_SUPERADMIN", "ROLE_MANAGER"})
 public class CMSProductController {
 
     private final ProductService productService;

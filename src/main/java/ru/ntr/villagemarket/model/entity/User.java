@@ -1,9 +1,12 @@
 package ru.ntr.villagemarket.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -35,6 +38,7 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    // @JsonFormat(pattern="dd.MM.yyyy")
     @Column(name = "birth_date")
     private Date birthDate;
 
@@ -59,7 +63,8 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -68,7 +73,8 @@ public class User {
     )
     private List<Role> roles;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     Cart cart;
 
 }

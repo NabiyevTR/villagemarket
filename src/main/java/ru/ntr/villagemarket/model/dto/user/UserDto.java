@@ -1,4 +1,4 @@
-package ru.ntr.villagemarket.model.dto;
+package ru.ntr.villagemarket.model.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

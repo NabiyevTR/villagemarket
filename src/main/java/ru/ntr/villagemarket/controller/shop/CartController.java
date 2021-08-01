@@ -2,12 +2,10 @@ package ru.ntr.villagemarket.controller.shop;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.ntr.villagemarket.model.dto.CartDto;
-import ru.ntr.villagemarket.model.helpers.CartItem;
+import ru.ntr.villagemarket.model.helpers.ProductItem;
 import ru.ntr.villagemarket.model.service.CartService;
-import ru.ntr.villagemarket.responses.Response;
 
 import java.util.List;
 
@@ -23,23 +21,20 @@ public class CartController {
 
     @GetMapping
     public CartDto getCart() {
-        return cartService.get();
+        //TODO Delete
+        CartDto cartDto = cartService.getCartDto();
+        return cartService.getCartDto();
     }
 
     @PostMapping
-    public Response overWrite(@RequestBody List<CartItem> cartItems) {
-
+    public void overWrite(@RequestBody List<ProductItem> productItems) {
         cartService.overwrite(CartDto.builder()
-                .cart(cartItems)
+                .cart(productItems)
                 .build());
-        return Response.builder()
-                .build();
     }
 
     @GetMapping("/checkout")
-    public Response checkout() {
+    public void checkout() {
         cartService.checkout();
-        return Response.builder()
-                .build();
     }
 }
