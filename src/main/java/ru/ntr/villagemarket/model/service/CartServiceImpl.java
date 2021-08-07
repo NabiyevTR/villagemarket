@@ -1,15 +1,13 @@
 package ru.ntr.villagemarket.model.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import ru.ntr.villagemarket.model.dto.CartDto;
+import ru.ntr.villagemarket.model.dto.cart.CartDto;
 import ru.ntr.villagemarket.model.entity.Cart;
 import ru.ntr.villagemarket.model.entity.User;
 import ru.ntr.villagemarket.model.mapper.OrderProductsMapper;
 import ru.ntr.villagemarket.model.repository.CartRepository;
-import ru.ntr.villagemarket.model.repository.UserRepository;
+
 
 @Service
 @RequiredArgsConstructor
@@ -17,9 +15,7 @@ public class CartServiceImpl implements CartService {
 
     private final OrderProductsMapper orderProductsMapper;
     private final CartRepository cartRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
-
 
     @Override
     public CartDto getCartDto() {
@@ -32,9 +28,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void overwrite(CartDto cartDto) {
+    public void update(CartDto cartDto) {
         cartRepository.save(orderProductsMapper.toCart(getCartId(), cartDto));
-
     }
 
     @Override

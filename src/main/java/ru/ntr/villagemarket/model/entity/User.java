@@ -38,7 +38,6 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    // @JsonFormat(pattern="dd.MM.yyyy")
     @Column(name = "birth_date")
     private Date birthDate;
 
@@ -63,7 +62,6 @@ public class User {
     @Column(name = "email")
     private String email;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
@@ -77,4 +75,6 @@ public class User {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     Cart cart;
 
+    @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
+    private List<Order> orders;
 }

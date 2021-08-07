@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import ru.ntr.villagemarket.model.dto.user.NewUserDto;
 import ru.ntr.villagemarket.model.dto.user.UserDto;
 import ru.ntr.villagemarket.model.service.UserService;
 
@@ -30,10 +31,9 @@ public class CMSUserController {
         return userService.findById(id);
     }
 
-    @PostMapping("")
-    public int create(@RequestBody UserDto userDto) {
-        userService.save(userDto);
-        return HttpStatus.OK.value();
+    @PostMapping
+    public void create(@RequestBody NewUserDto newUserDto) {
+        userService.regUser(newUserDto);
     }
 
     @PatchMapping(value = "/{id}/edit")

@@ -1,0 +1,92 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- USERS -->
+
+
+    <!-- PRODUCTS, PRICES, CATEGORIES -->
+
+    <changeSet id="add description and img_link fields to product table" author="NTR">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="products"/>
+                <not>
+                    <columnExists tableName="products" columnName="description"/>
+                    <columnExists tableName="products" columnName="img_link"/>
+                </not>
+            </and>
+        </preConditions>
+
+        <addColumn tableName="products">
+            <column name="description" type="clob"/>
+            <column name="img_link" type="varchar(100)"/>
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="products" columnName="description"/>
+            <dropColumn tableName="products" columnName="img_link"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="add available_for_sale column in products table" author="NTR">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="products"/>
+                <not>
+                    <columnExists tableName="products" columnName="available_for_sale"/>
+                </not>
+            </and>
+        </preConditions>
+
+        <addColumn tableName="products">
+            <column name="available_for_sale" type="boolean" defaultValue="false"/>
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="products" columnName="available_for_sale"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create products_categories table" author="NTR">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="products_categories"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="products_categories">
+            <column name="product_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+
+        <addForeignKeyConstraint baseTableName="products_categories"
+                                 baseColumnNames="product_id"
+                                 constraintName="fk_products_categories_product"
+                                 referencedTableName="products"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="products_categories"
+                                 baseColumnNames="category_id"
+                                 constraintName="fk_products_categories_category"
+                                 referencedTableName="categories"
+                                 referencedColumnNames="id"/>
+
+
+        <rollback>
+            <dropTable tableName="products_categories"/>
+        </rollback>
+
+    </changeSet>
+    <!-- ORDERS -->
+
+
+</databaseChangeLog>

@@ -3,10 +3,9 @@ package ru.ntr.villagemarket.model.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.ntr.villagemarket.config.AppProperties;
-import ru.ntr.villagemarket.model.dto.order.NewOrderDto;
-import ru.ntr.villagemarket.model.dto.order.OrderDtoBasic;
-import ru.ntr.villagemarket.model.dto.order.OrderWithHistoryDto;
+import ru.ntr.villagemarket.model.dto.order.*;
 import ru.ntr.villagemarket.model.entity.*;
+import ru.ntr.villagemarket.model.mapper.OrderHistoryMapper;
 import ru.ntr.villagemarket.model.mapper.OrderMapper;
 import ru.ntr.villagemarket.model.repository.*;
 
@@ -19,16 +18,20 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
+    // Mappers
     private final OrderMapper orderMapper;
-    private final UserRepository userRepository;
+    private final OrderHistoryMapper orderHistoryMapper;
+
+    //Services
+
+    private final CartService cartService;
     private final UserService userService;
+
+    //Repositories
     private final OrderRepository orderRepository;
     private final OrderHistoryRepository orderHistoryRepository;
     private final OrderStatusRepository orderStatusRepository;
-    private final CartService cartService;
-    private final CartRepository cartRepository;
     private final ProductRepository productRepository;
-    private final OrderedProductRepository orderedProductRepository;
 
     @Override
     public NewOrderDto dataForNewOrder() {
@@ -45,16 +48,14 @@ public class OrderServiceImpl implements OrderService {
                 .build();
     }
 
+
+
     @Override
     public void createOrder(NewOrderDto newOrderDto) {
 
         //Creating new order
         var order = orderMapper.toOrder(newOrderDto);
 
-
-        // Не получилось напрямую получить продукты из корзины и положить в заказ
-        // org.hibernate.HibernateException: Found shared references to a collection
-        // Поэтому пришлось сделать через productIds. Так можно?
         List<Integer> productIds = cartService.getCart().getProducts().stream()
                 .map(Product::getId)
                 .collect(Collectors.toList());
@@ -88,22 +89,48 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDtoBasic> findAll() {
-        return orderMapper.fromOrders(orderRepository.findAll());
+    public List<OrderBasicDto> findAll() {
+        return orderMapper.toOrderBasicDtos(orderRepository.findAll());
     }
 
     @Override
-    public List<OrderDtoBasic> findAllActive() {
-        return orderMapper.fromOrders(orderRepository.findAllByStatusIsNotIn(new String[]{"Closed", "Canceled"}));
+    public List<OrderBasicDto> findAllActive() {
+        return orderMapper.toOrderBasicDtos(orderRepository.findAllByStatusNot(
+                orderStatusRepository.findByStatus("Closed")
+        ));
     }
 
     @Override
     public OrderWithHistoryDto findById(int id) {
         //TODO handle optional
 
-        return orderMapper.fromOrderToOrderWithHistoryDto(orderRepository.findById(id).get());
+        return orderMapper.toOrderWithHistoryDto(orderRepository.findById(id).get());
     }
 
+    @Override
+    public OrderStatusChangeResponseDto changeStatus(int id, OrderStatusChangeRequestDto orderStatusChangeRequestDto) {
+
+        var orderStatus = orderStatusRepository.findByStatus(orderStatusChangeRequestDto.getStatus());
+        //TODO handle optional
+        var order = orderRepository.findById(id).get();
+
+        order.setStatus(orderStatus);
+
+        var orderHistoryItem = OrderHistoryItem.builder()
+                .order(order)
+                .date(new Date())
+                .orderStatus(orderStatus)
+                .build();
+
+        orderHistoryRepository.save(orderHistoryItem);
+
+        orderRepository.save(order);
+
+        return OrderStatusChangeResponseDto.builder()
+                .history(orderHistoryMapper.fromOrderHistory(order.getHistory()))
+                .status(order.getStatus().getStatus())
+                .build();
+    }
 
     @Override
     public void save(NewOrderDto newOrderDto) {

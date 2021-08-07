@@ -17,31 +17,18 @@ import java.util.List;
 public class UserDto {
 
     private int id;
-
     private String username;
-
     private String password;
-
     private String firstName;
-
     private String lastName;
-
     private Date birthDate;
-
     private Date regDate;
-
     private char gender;
-
-    private boolean isBlocked;
-
+    private boolean active;
     private String address;
-
     private String comments;
-
     private String phoneNumber;
-
     private String email;
-
     private List<String> roles;
 
 }

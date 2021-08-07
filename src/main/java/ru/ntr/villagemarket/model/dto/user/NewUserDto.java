@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.ntr.villagemarket.model.dto.order.OrderDto;
 
 import java.util.Date;
 import java.util.List;
@@ -13,9 +12,10 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfileDto {
+public class NewUserDto {
 
     private String username;
+    private String password;
     private String firstName;
     private String lastName;
     private Date birthDate;
@@ -23,7 +23,6 @@ public class UserProfileDto {
     private String address;
     private String phoneNumber;
     private String email;
-
-    private List<OrderDto> orders;
-
+    private boolean active;
+    private List<String> roles;
 }

@@ -1,4 +1,4 @@
-package ru.ntr.villagemarket.model.dto;
+package ru.ntr.villagemarket.model.dto.auth;
 
 import lombok.Data;
 

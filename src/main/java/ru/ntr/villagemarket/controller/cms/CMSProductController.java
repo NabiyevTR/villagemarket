@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-import ru.ntr.villagemarket.model.dto.ProductDto;
+import ru.ntr.villagemarket.model.dto.product.ProductDto;
 import ru.ntr.villagemarket.model.service.ProductService;
 import java.util.List;
 
@@ -23,6 +23,10 @@ public class CMSProductController {
         return productService.findAll();
     }
 
+    @GetMapping("available")
+    public List<ProductDto> showAvailableProducts() {
+        return productService.findAllAvailable();
+    }
 
     @GetMapping("/{id}")
     public ProductDto showProduct(@PathVariable("id") int id) {

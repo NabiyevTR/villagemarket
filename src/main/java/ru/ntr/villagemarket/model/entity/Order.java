@@ -47,13 +47,11 @@ public class Order {
     @JoinColumn(name = "status_id")
     private OrderStatus status;
 
-    @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ToString.Exclude
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "orders_products",
             joinColumns = @JoinColumn(name = "order_id"),
@@ -62,10 +60,7 @@ public class Order {
     )
     private List<OrderedProduct> products;
 
-    @ToString.Exclude
-    @OneToMany(mappedBy="order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderHistoryItem> history;
-
-
 
 }
