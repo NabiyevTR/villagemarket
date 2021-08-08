@@ -1,4 +1,4 @@
-package ru.ntr.villagemarket.model.dto;
+package ru.ntr.villagemarket.model.dto.cart;
 
 import lombok.Builder;
 import lombok.Data;

@@ -18,6 +18,7 @@ import java.util.Properties;
 @Component
 public final class AppProperties {
 
+
     //SUPERADMIN
     //username SUPERADMIN
     //password 123456
@@ -33,6 +34,9 @@ public final class AppProperties {
     private static final String APP_CONFIG_PATH = "app.properties";
     private static final String PUBLIC_KEY_PATH = "/keypair/id_rsa_villagemarket.pub";
     private static final String PRIVATE_KEY_PATH = "/keypair/id_rsa_villagemarket";
+
+    public static final String IMG_CATALOG = "http://bimel.ru/content/vm/catalog/";
+    public static final String DEFAULT_IMAGE = "no-product-image.png";
 
 
     public static final int DAYS_FOR_DELIVERY = 2;
@@ -71,7 +75,7 @@ public final class AppProperties {
         KeyFactory kf = KeyFactory.getInstance("RSA");
         X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyContent));
         PublicKey pl = kf.generatePublic(keySpecX509);
-        return  kf.generatePublic(keySpecX509);
+        return kf.generatePublic(keySpecX509);
     }
 
     private PrivateKey loadPrivateKey() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
@@ -85,7 +89,7 @@ public final class AppProperties {
 
         KeyFactory kf = KeyFactory.getInstance("RSA");
         PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKeyContent));
-               return kf.generatePrivate(keySpecPKCS8);
+        return kf.generatePrivate(keySpecPKCS8);
     }
 
     public void loadKeyPair() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {

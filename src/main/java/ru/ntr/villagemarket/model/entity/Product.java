@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.ntr.villagemarket.config.AppProperties;
 
 import javax.persistence.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "products")
@@ -17,6 +17,11 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class Product {
 
+    @Transient
+    private static final String IMG_CATALOG = AppProperties.IMG_CATALOG;
+    @Transient
+    private static final String DEFAULT_IMAGE = AppProperties.DEFAULT_IMAGE;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -25,10 +30,30 @@ public class Product {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "img_link")
+    private String imgLink;
+
+    @Column(name = "available_for_sale")
+    private boolean availableForSale;
+
     @OneToMany(fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
             mappedBy = "product")
     private List<Price> prices;
+
+
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "products_categories",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"),
+            foreignKey = @ForeignKey(name = "fk_products_categories_categories")
+    )
+    List<ProductCategory> categories;
+
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(

@@ -1,15 +1,20 @@
 package ru.ntr.villagemarket.responses;
 
-import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
-import org.springframework.http.HttpStatus;
+import lombok.NoArgsConstructor;
+
 
 @Data
-@SuperBuilder
-public class Response {
-    @Builder.Default
-    private int httpStatus = HttpStatus.OK.value();
-    @Builder.Default
+@NoArgsConstructor
+public class Response  {
+
+    private boolean error = false;
     private String errorMessage ="";
+    private  Object data;
+
+    public Response(Object data) {
+        this.data = data;
+    }
+
+
 }

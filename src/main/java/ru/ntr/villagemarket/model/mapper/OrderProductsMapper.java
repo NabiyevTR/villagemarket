@@ -2,8 +2,8 @@ package ru.ntr.villagemarket.model.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.ntr.villagemarket.model.dto.CartDto;
-import ru.ntr.villagemarket.model.dto.ProductDto;
+import ru.ntr.villagemarket.model.dto.cart.CartDto;
+import ru.ntr.villagemarket.model.dto.product.ProductDto;
 import ru.ntr.villagemarket.model.entity.Cart;
 import ru.ntr.villagemarket.model.entity.Product;
 import ru.ntr.villagemarket.model.helpers.ProductItem;
@@ -66,18 +66,19 @@ public class OrderProductsMapper {
 
     public List<ProductItem> fromProductDtoList(List<ProductDto> productDtos) {
 
-        List<ProductItem> cart = new ArrayList<>();
+        List<ProductItem> productItems = new ArrayList<>();
 
         if (productDtos == null) {
-            return cart;
+            return productItems;
         }
 
         for (ProductDto product : productDtos) {
 
-            Optional<ProductItem> optional = cart.stream().filter(e -> e.getId() == product.getId()).findFirst();
+            Optional<ProductItem> optional = productItems.stream().filter(e -> e.getId() == product.getId()).findFirst();
+
 
             if (optional.isEmpty()) {
-                cart.add(
+                productItems.add(
                         ProductItem.builder()
                                 .id(product.getId())
                                 .name(product.getName())
@@ -91,7 +92,7 @@ public class OrderProductsMapper {
                 productItem.setQuantity(++quantity);
             }
         }
-        return cart;
+        return productItems;
     }
 
 

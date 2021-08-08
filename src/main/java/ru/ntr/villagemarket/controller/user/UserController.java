@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.ntr.villagemarket.model.dto.user.UserDto;
+import ru.ntr.villagemarket.model.dto.user.UserProfileDto;
+import ru.ntr.villagemarket.model.mapper.UserProfileMapper;
 import ru.ntr.villagemarket.model.service.UserService;
 
 @RestController
@@ -15,12 +17,11 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    //TODO Show current user
-    public UserDto showUser() {
-        return userService.showCurrentUser();
+    public UserProfileDto showUser() {
+        return userService.getCurrentUserProfile();
     }
 
-    @PatchMapping("/edit")
+    @PatchMapping
     public void updateUser(@RequestBody UserDto userDto) {
         userService.save(userDto);
     }
