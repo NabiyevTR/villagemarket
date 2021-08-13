@@ -37,14 +37,12 @@ public class CMSUserController {
     }
 
     @PatchMapping(value = "/{id}/edit")
-    public int updateProduct(@RequestBody UserDto userDto, @PathVariable("id") int id) {
+    public void updateUser(@RequestBody UserDto userDto, @PathVariable("id") int id) {
         userService.save(userDto);
-        return HttpStatus.OK.value();
     }
 
     @DeleteMapping("/{id}")
-    public int deleteUser(@PathVariable("id") int id) {
+    public void deleteUser(@PathVariable("id") int id) {
         userService.delete(id);
-        return HttpStatus.OK.value();
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.ntr.villagemarket.exceptions.UserIsBlockedException;
 import ru.ntr.villagemarket.model.service.SecurityService;
 import ru.ntr.villagemarket.model.service.UserService;
 
@@ -34,7 +35,6 @@ public class CustomFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-
         try {
 
             final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -44,6 +44,7 @@ public class CustomFilter extends OncePerRequestFilter {
                 final String token = header.replaceFirst(AUTH_PREFIX, "");
 
                 String username = securityService.verifyJwt(token);
+
 
 
                 final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =

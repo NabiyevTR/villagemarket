@@ -33,13 +33,6 @@ public class CMSOrderController {
         return orderService.findById(id);
     }
 
-
-   /* //TODO correct types
-    @PatchMapping("/{id}/edit")
-    public void updateOrder(@RequestBody NewOrderDto newOrderDto, @PathVariable("id") int id) {
-        orderService.save(newOrderDto);
-    }*/
-
     @PatchMapping("/{id}/edit/status")
     public OrderStatusChangeResponseDto updateOrderStatus(@RequestBody OrderStatusChangeRequestDto orderStatusChangeRequestDto,
                                                           @PathVariable("id") int id) {

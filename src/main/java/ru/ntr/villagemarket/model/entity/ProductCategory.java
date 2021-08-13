@@ -1,6 +1,6 @@
 package ru.ntr.villagemarket.model.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -8,6 +8,9 @@ import java.util.List;
 @Entity
 @Table(name = "categories")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductCategory {
 
     @Id
