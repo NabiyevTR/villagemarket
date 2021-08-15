@@ -19,11 +19,6 @@ import java.util.Properties;
 public final class AppProperties {
 
 
-    //SUPERADMIN
-    //username SUPERADMIN
-    //password 123456
-
-
     @Getter
     private Properties properties;
 
@@ -40,6 +35,7 @@ public final class AppProperties {
 
 
     public static final int DAYS_FOR_DELIVERY = 2;
+    public static final boolean CONTROLLER_LOGGING = false;
 
 
     @SneakyThrows

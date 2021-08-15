@@ -28,9 +28,6 @@ public class CMSCustomerController {
     @GetMapping("/{id}")
     public CustomerFullDto showCustomer(@PathVariable("id") int id) {
         return userService.findCustomerById(id);
-
-
-
     }
 }
 

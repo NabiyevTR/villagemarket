@@ -45,22 +45,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findById(int id) {
-        Optional<User> user = userRepository.findUserById(id);
-        if (user.isEmpty()) {
-            throw new NoSuchUserException(id);
-        } else {
-            return userMapper.fromUser(user.get());
-        }
+        var user = userRepository.findUserById(id).orElseThrow(() -> new NoSuchUserException(id));;
+        return userMapper.fromUser(user);
     }
 
     @Override
     public CustomerFullDto findCustomerById(int id) {
-        Optional<User> user = userRepository.findUserById(id);
-        if (user.isEmpty()) {
-            throw new NoSuchUserException(id);
-        } else {
-            return customerMapper.toCustomerFullDto(user.get());
-        }
+        User user = userRepository.findUserById(id).orElseThrow(() -> new NoSuchUserException(id));
+        return customerMapper.toCustomerFullDto(user);
     }
 
     @Override
@@ -94,26 +86,32 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Transactional
     @Override
     public void delete(int id) {
 
-        Optional<User> userToDelete = userRepository.findUserById(id);
+        var userToDelete = userRepository.findUserById(id)
+                .orElseThrow(() -> new NoSuchUserException(id));
 
-        if (userToDelete.isPresent()) {
-            orderRepository.deleteOrdersByUser(userToDelete.get());
-            userRepository.deleteById(id);
+        if (userToDelete.equals(getCurrentUser())) {
+            throw new CurrentUserDeleteException();
         }
+
+        if (userToDelete.getRoles().stream()
+                .anyMatch(role -> role.getRole().equals("SUPERADMIN"))
+        ) {
+            throw new SuperAdminDeleteException();
+        }
+
+        orderRepository.deleteOrdersByUser(userToDelete);
+        userRepository.deleteById(id);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optionalUser = userRepository.findUserByUsername(username);
-        if (optionalUser.isEmpty()) {
-            throw new UsernameNotFoundException(username);
-        }
-        return new UserPrincipal(optionalUser.get());
+        var user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+        return new UserPrincipal(user);
     }
 
     @Override
@@ -130,11 +128,8 @@ public class UserServiceImpl implements UserService {
                 ? ((UserDetails) principal).getUsername()
                 : principal.toString();
 
-        Optional<User> optionalUser = userRepository.findUserByUsername(username);
-        if (optionalUser.isEmpty()) {
-            throw new NoCurrentUserException();
-        }
-        return optionalUser.get();
+        return userRepository.findUserByUsername(username)
+                .orElseThrow(NoCurrentUserException::new);
     }
 
 }

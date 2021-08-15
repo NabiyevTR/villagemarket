@@ -33,21 +33,18 @@ public class CMSProductController {
         return productService.findById(id);
     }
 
-    @PostMapping("")
-    public int create(@RequestBody ProductDto productDto) {
+    @PostMapping
+    public void create(@RequestBody ProductDto productDto) {
         productService.save(productDto);
-        return HttpStatus.OK.value();
     }
 
     @PatchMapping(value = "/{id}/edit")
-    public int updateProduct(@RequestBody ProductDto productDto, @PathVariable("id") int id) {
+    public void updateProduct(@RequestBody ProductDto productDto, @PathVariable("id") int id) {
         productService.save(productDto);
-        return HttpStatus.OK.value();
     }
 
     @DeleteMapping("/{id}")
-    public int deleteProduct(@PathVariable("id") int id) {
+    public void deleteProduct(@PathVariable("id") int id) {
         productService.delete(id);
-        return HttpStatus.OK.value();
     }
 }
