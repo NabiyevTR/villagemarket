@@ -33,12 +33,11 @@ public class CMSOrderController {
         return orderService.findById(id);
     }
 
-    @PatchMapping("/{id}/edit/status")
+    @PatchMapping("/{id}/status")
     public OrderStatusChangeResponseDto updateOrderStatus(@RequestBody OrderStatusChangeRequestDto orderStatusChangeRequestDto,
                                                           @PathVariable("id") int id) {
         return orderService.changeStatus(id, orderStatusChangeRequestDto);
     }
-
 
     @DeleteMapping("/{id}")
     public void deleteOrder(@PathVariable("id") int id) {

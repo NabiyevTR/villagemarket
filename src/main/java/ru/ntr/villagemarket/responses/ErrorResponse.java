@@ -2,7 +2,6 @@ package ru.ntr.villagemarket.responses;
 
 import lombok.Data;
 
-
 @Data
 public class ErrorResponse extends Response {
 

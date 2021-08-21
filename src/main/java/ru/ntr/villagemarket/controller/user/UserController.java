@@ -3,9 +3,9 @@ package ru.ntr.villagemarket.controller.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.ntr.villagemarket.model.dto.user.UpdateUserProfileDto;
 import ru.ntr.villagemarket.model.dto.user.UserDto;
 import ru.ntr.villagemarket.model.dto.user.UserProfileDto;
-import ru.ntr.villagemarket.model.mapper.UserProfileMapper;
 import ru.ntr.villagemarket.model.service.UserService;
 
 @RestController
@@ -22,8 +22,8 @@ public class UserController {
     }
 
     @PatchMapping
-    public void updateUser(@RequestBody UserDto userDto) {
-        userService.save(userDto);
+    public void updateUser(@RequestBody UpdateUserProfileDto updateUserProfileDto) {
+        userService.updateUserProfile(updateUserProfileDto);
     }
 }
 

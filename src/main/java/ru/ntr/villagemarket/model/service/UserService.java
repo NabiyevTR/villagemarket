@@ -18,6 +18,8 @@ public interface UserService extends UserDetailsService {
 
     void save(UserDto userDto);
 
+    void updateUserProfile(UpdateUserProfileDto updateUserProfileDto);
+
     void regUser(NewUserDto newUserDto);
 
     void delete(int id);
@@ -25,6 +27,5 @@ public interface UserService extends UserDetailsService {
     UserProfileDto getCurrentUserProfile();
 
     User getCurrentUser();
-
 
 }

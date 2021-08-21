@@ -3,7 +3,6 @@ package ru.ntr.villagemarket.responses;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @NoArgsConstructor
 public class Response  {
@@ -15,6 +14,5 @@ public class Response  {
     public Response(Object data) {
         this.data = data;
     }
-
 
 }

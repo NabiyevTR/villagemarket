@@ -25,7 +25,7 @@ public class LoggingControllerAspect {
     @Before("controllerLogger()")
     public void before(JoinPoint joinPoint) {
 
-        if (!AppProperties.CONTROLLER_LOGGING) return;
+        if (!AppProperties.controllerLogging) return;
 
         try {
             log.info(
@@ -44,7 +44,7 @@ public class LoggingControllerAspect {
     @AfterReturning(value = "controllerLogger()", returning = "obj")
     public void afterReturning(Object obj) {
 
-        if (!AppProperties.CONTROLLER_LOGGING) return;
+        if (!AppProperties.controllerLogging) return;
 
         try {
             log.info(
@@ -61,7 +61,7 @@ public class LoggingControllerAspect {
     @AfterThrowing(value = "controllerLogger()", throwing = "e")
     public void afterThrow(JoinPoint joinPoint, Throwable e) {
 
-        if (!AppProperties.CONTROLLER_LOGGING) return;
+        if (!AppProperties.controllerLogging) return;
 
         log.error("Error: ", e.getClass().getName());
     }

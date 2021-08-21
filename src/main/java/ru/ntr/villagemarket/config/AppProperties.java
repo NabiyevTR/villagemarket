@@ -1,8 +1,8 @@
 package ru.ntr.villagemarket.config;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -15,6 +15,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Properties;
 
+@Slf4j
 @Component
 public final class AppProperties {
 
@@ -26,16 +27,15 @@ public final class AppProperties {
     private KeyPair keyPair;
 
     private static final String RESOURCE_PATH = new File("src/main/resources").getAbsolutePath();
-    private static final String APP_CONFIG_PATH = "app.properties";
+    private static final String APP_CONFIG_PATH = "application.properties";
     private static final String PUBLIC_KEY_PATH = "/keypair/id_rsa_villagemarket.pub";
     private static final String PRIVATE_KEY_PATH = "/keypair/id_rsa_villagemarket";
 
-    public static final String IMG_CATALOG = "http://bimel.ru/content/vm/catalog/";
-    public static final String DEFAULT_IMAGE = "no-product-image.png";
+    public static String imgCatalog = "http://bimel.ru/content/vm/catalog/";
+    public static String defaultImage = "no-product-image.png";
 
-
-    public static final int DAYS_FOR_DELIVERY = 2;
-    public static final boolean CONTROLLER_LOGGING = false;
+    public static int daysForDelivery = 2;
+    public static boolean controllerLogging = false;
 
 
     @SneakyThrows
@@ -54,8 +54,15 @@ public final class AppProperties {
             properties.load(Thread.currentThread()
                     .getContextClassLoader()
                     .getResourceAsStream(APP_CONFIG_PATH));
+
+            imgCatalog = properties.getProperty("market.imgCatalog");
+            defaultImage = properties.getProperty("market.defaultImage");
+            daysForDelivery = Integer.parseInt(properties.getProperty("market.daysForDelivery"));
+            controllerLogging = Boolean.parseBoolean(properties.getProperty("market.controllerLogging"));
+
         } catch (IOException e) {
-            e.printStackTrace(); //TODO handle exception
+            log.error("Cannot load properties. Server is running with default properties", e.getMessage());
+
         }
     }
 

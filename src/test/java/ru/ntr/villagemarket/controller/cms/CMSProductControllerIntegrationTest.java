@@ -165,7 +165,7 @@ class CMSProductControllerIntegrationTest extends AbstractControllerIntegrationT
 
 
 
-        mockMvc.perform(patch("/api/cms/product/{id}/edit", 1)
+        mockMvc.perform(patch("/api/cms/product/{id}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(ow.writeValueAsString(productDto)))
                 .andExpect(status().isOk());

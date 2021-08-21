@@ -18,9 +18,9 @@ import java.util.*;
 public class Product {
 
     @Transient
-    private static final String IMG_CATALOG = AppProperties.IMG_CATALOG;
+    private static final String IMG_CATALOG = AppProperties.imgCatalog;
     @Transient
-    private static final String DEFAULT_IMAGE = AppProperties.DEFAULT_IMAGE;
+    private static final String DEFAULT_IMAGE = AppProperties.defaultImage;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +44,6 @@ public class Product {
             mappedBy = "product")
     private List<Price> prices;
 
-
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(
             name = "products_categories",
@@ -53,16 +52,6 @@ public class Product {
             foreignKey = @ForeignKey(name = "fk_products_categories_categories")
     )
     List<ProductCategory> categories;
-
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "orders_products",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"),
-            foreignKey = @ForeignKey(name = "fk_orders_products_orders")
-    )
-    List<Order> orders;
 
     public Double getPrice() {
         return prices.stream()

@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.ntr.villagemarket.model.dto.user.NewUserDto;
+import ru.ntr.villagemarket.model.dto.user.UpdateUserProfileDto;
 import ru.ntr.villagemarket.model.dto.user.UserDto;
 import ru.ntr.villagemarket.model.entity.Role;
 import ru.ntr.villagemarket.model.entity.User;
@@ -67,6 +68,19 @@ public class UserMapper {
                         : newUserDto.getRoles().stream()
                         .map(roleService::getRoleByName)
                         .collect(Collectors.toList()))
+                .build();
+    }
+
+    public User toUser(UpdateUserProfileDto updateUserProfileDto) {
+
+        return User.builder()
+                .firstName(updateUserProfileDto.getFirstName())
+                .lastName(updateUserProfileDto.getLastName())
+                .birthDate(updateUserProfileDto.getBirthDate())
+                .gender((int) updateUserProfileDto.getGender() == 0 ? 'u' : updateUserProfileDto.getGender())
+                .address(updateUserProfileDto.getAddress())
+                .phoneNumber(updateUserProfileDto.getPhoneNumber())
+                .email(updateUserProfileDto.getEmail())
                 .build();
     }
 

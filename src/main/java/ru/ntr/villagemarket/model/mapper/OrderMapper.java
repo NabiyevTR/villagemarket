@@ -10,9 +10,7 @@ import ru.ntr.villagemarket.model.dto.order.OrderBasicDto;
 import ru.ntr.villagemarket.model.dto.order.OrderWithHistoryDto;
 import ru.ntr.villagemarket.model.entity.Order;
 import ru.ntr.villagemarket.model.entity.OrderedProduct;
-import ru.ntr.villagemarket.model.helpers.ProductItem;
 import ru.ntr.villagemarket.model.repository.OrderStatusRepository;
-import ru.ntr.villagemarket.model.repository.ProductRepository;
 import ru.ntr.villagemarket.model.service.UserService;
 
 import java.util.*;
@@ -149,7 +147,7 @@ public class OrderMapper {
         var currentDate = new Date();
         var calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
-        calendar.add(Calendar.DATE, AppProperties.DAYS_FOR_DELIVERY);
+        calendar.add(Calendar.DATE, AppProperties.daysForDelivery);
         return calendar.getTime();
     }
 

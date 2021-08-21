@@ -1,14 +1,15 @@
 package ru.ntr.villagemarket.exceptions;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@RequiredArgsConstructor
+import static ru.ntr.villagemarket.exceptions.ErrorMessages.NO_SUCH_USER_EXCEPTION;
+
+@AllArgsConstructor
 public class NoSuchUserException extends RuntimeException {
 
-    private final int userId;
+    private int userId;
 
-    @Override
-    public String getMessage() {
-        return String.format("Cannot find user with id %s.", userId);
-    }
+    @Getter
+    private final String message = NO_SUCH_USER_EXCEPTION.toString() + userId;
 }

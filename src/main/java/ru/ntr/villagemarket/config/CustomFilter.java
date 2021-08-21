@@ -63,31 +63,17 @@ public class CustomFilter extends OncePerRequestFilter {
             response.setHeader("message", "Invalid token.");
             return;
         }
-
-
         filterChain.doFilter(request, response);
-
 
     }
 
 
     //TO
     private void responseError(HttpServletResponse response, String errorMessage) {
-        ObjectMapper mapper = new ObjectMapper();
 
         Map<String, Object> errorDetails = new HashMap<>();
         errorDetails.put("message", errorMessage);
-
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-        try {
-            mapper.writeValue(response.getWriter(), errorDetails);
-        } catch (IOException e) {
-            //TODO handle error
-        }
-
     }
-
-
 }

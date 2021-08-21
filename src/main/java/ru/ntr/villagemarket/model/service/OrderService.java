@@ -6,14 +6,13 @@ import java.util.List;
 
 public interface OrderService {
 
-
     void createOrder(NewOrderDto newOrderDto);
 
     NewOrderDto dataForNewOrder();
 
     List<OrderBasicDto> findAll();
 
-   OrderWithHistoryDto findById(int id);
+    OrderWithHistoryDto findById(int id);
 
     void save(NewOrderDto newOrderDto);
 
@@ -22,4 +21,5 @@ public interface OrderService {
     List<OrderBasicDto> findAllActive();
 
     OrderStatusChangeResponseDto changeStatus(int id, OrderStatusChangeRequestDto orderStatusChangeRequestDto);
+
 }

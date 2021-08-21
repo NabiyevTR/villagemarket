@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findById(int id) {
-        var user = userRepository.findUserById(id).orElseThrow(() -> new NoSuchUserException(id));;
+        var user = userRepository.findUserById(id).orElseThrow(() -> new NoSuchUserException(id));
         return userMapper.fromUser(user);
     }
 
@@ -60,31 +60,43 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userMapper.toUser(userDto));
     }
 
+    @Override
+    public void updateUserProfile(UpdateUserProfileDto updateUserProfileDto) {
+
+        var currentUser = getCurrentUser();
+
+        if (!currentUser.getPhoneNumber().equals(updateUserProfileDto.getPhoneNumber())) {
+            checkIfPhoneNumberExists(updateUserProfileDto.getPhoneNumber());
+        }
+
+        if (!currentUser.getEmail().equals(updateUserProfileDto.getEmail())) {
+            checkIfEmailExists(updateUserProfileDto.getEmail());
+        }
+
+        var updatedCurrentUser = (userMapper.toUser(updateUserProfileDto));
+
+        updatedCurrentUser.setId(currentUser.getId());
+        updatedCurrentUser.setUsername(currentUser.getUsername());
+        updatedCurrentUser.setPassword(currentUser.getPassword());
+        updatedCurrentUser.setRegDate(currentUser.getRegDate());
+        updatedCurrentUser.setId(currentUser.getId());
+        updatedCurrentUser.setBlocked(currentUser.isBlocked());
+        updatedCurrentUser.setComments(currentUser.getComments());
+        updatedCurrentUser.setRoles(currentUser.getRoles());
+
+        userRepository.save(updatedCurrentUser);
+    }
+
 
     @Override
     public void regUser(NewUserDto newUserDto) {
 
-        // Check if user with such username exists
-        Optional<User> optionalUser = userRepository.findUserByUsername(newUserDto.getUsername());
-        if (optionalUser.isPresent()) {
-            throw new UserWithSuchUsernameExistsException();
-        }
-
-        // Check if user with such email exists
-        optionalUser = userRepository.findUserByEmail(newUserDto.getEmail());
-        if (optionalUser.isPresent()) {
-            throw new UserWithSuchEmailExistsException();
-        }
-
-        // Check if user with such phone number exists
-        optionalUser = userRepository.findUserByPhoneNumber(newUserDto.getPhoneNumber());
-        if (optionalUser.isPresent()) {
-            throw new UserWithSuchPhoneNumberExistsException();
-        }
+        checkIfUserNameExists(newUserDto.getUsername());
+        checkIfEmailExists(newUserDto.getEmail());
+        checkIfPhoneNumberExists(newUserDto.getPhoneNumber());
 
         userRepository.save(userMapper.toUser(newUserDto));
     }
-
 
     @Transactional
     @Override
@@ -130,6 +142,27 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.findUserByUsername(username)
                 .orElseThrow(NoCurrentUserException::new);
+    }
+
+    private void checkIfUserNameExists(String username) {
+        Optional<User> optionalUser = userRepository.findUserByUsername(username);
+        if (optionalUser.isPresent()) {
+            throw new UserWithSuchUsernameExistsException();
+        }
+    }
+
+    private void checkIfEmailExists(String email) {
+        Optional<User> optionalUser = userRepository.findUserByEmail(email);
+        if (optionalUser.isPresent()) {
+            throw new UserWithSuchEmailExistsException();
+        }
+    }
+
+    private void checkIfPhoneNumberExists(String phoneNumber) {
+        Optional<User> optionalUser = userRepository.findUserByPhoneNumber(phoneNumber);
+        if (optionalUser.isPresent()) {
+            throw new UserWithSuchPhoneNumberExistsException();
+        }
     }
 
 }

@@ -34,6 +34,4 @@ public class Price {
     @JoinColumn(name="product_id", referencedColumnName = "id" , insertable = false, updatable = false)
     Product product;
 
-    //product id в Price
-
 }

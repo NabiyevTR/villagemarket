@@ -3,6 +3,7 @@ package ru.ntr.villagemarket.model.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.ntr.villagemarket.config.AppProperties;
+import ru.ntr.villagemarket.exceptions.NoSuchOrderException;
 import ru.ntr.villagemarket.model.dto.order.*;
 import ru.ntr.villagemarket.model.entity.*;
 import ru.ntr.villagemarket.model.mapper.OrderHistoryMapper;
@@ -47,8 +48,6 @@ public class OrderServiceImpl implements OrderService {
                 .deliveryDate(getDeliveryDate())
                 .build();
     }
-
-
 
     @Override
     public void createOrder(NewOrderDto newOrderDto) {
@@ -102,17 +101,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderWithHistoryDto findById(int id) {
-        //TODO handle optional
-
-        return orderMapper.toOrderWithHistoryDto(orderRepository.findById(id).get());
+              return orderMapper.toOrderWithHistoryDto(orderRepository.findById(id)
+                .orElseThrow(() -> new NoSuchOrderException(id)));
     }
 
     @Override
     public OrderStatusChangeResponseDto changeStatus(int id, OrderStatusChangeRequestDto orderStatusChangeRequestDto) {
 
         var orderStatus = orderStatusRepository.findByStatus(orderStatusChangeRequestDto.getStatus());
-        //TODO handle optional
-        var order = orderRepository.findById(id).get();
+
+        var order = orderRepository.findById(id).orElseThrow(() -> new NoSuchOrderException(id));
 
         order.setStatus(orderStatus);
 
@@ -142,14 +140,12 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.deleteById(id);
     }
 
-
     //Helpers
-
     private Date getDeliveryDate() {
         var currentDate = new Date();
         var calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
-        calendar.add(Calendar.DATE, AppProperties.DAYS_FOR_DELIVERY);
+        calendar.add(Calendar.DATE, AppProperties.daysForDelivery);
         return calendar.getTime();
     }
 
