@@ -193,7 +193,7 @@ class CMSOrderControllerIntegrationTest extends AbstractControllerIntegrationTes
                 .status("Confirmed")
                 .build();
 
-        mockMvc.perform(patch("/api/cms/order/{id}/edit/status", 1)
+        mockMvc.perform(patch("/api/cms/order/{id}/status", 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(ow.writeValueAsString(orderStatusChangeRequestDto)))
                 .andExpect(status().isOk())

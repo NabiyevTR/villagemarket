@@ -1,0 +1,23 @@
+{
+  "properties": [
+    {
+      "name": "market.imgCatalog",
+      "type": "java.lang.String",
+      "description": "Description for market.imgCatalog."
+    },
+    {
+      "name": "market.defaultImage",
+      "type": "java.lang.String",
+      "description": "Description for market.defaultImage."
+    },
+    {
+      "name": "market.daysForDelivery",
+      "type": "java.lang.Integer",
+      "description": "Description for market.daysForDelivery."
+    },
+    {
+      "name": "market.controllerLogging",
+      "type": "java.lang.Boolean",
+      "description": "Description for market.controllerLogging."
+    }
+  ] }

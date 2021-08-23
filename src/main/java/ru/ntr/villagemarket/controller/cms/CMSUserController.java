@@ -25,7 +25,6 @@ public class CMSUserController {
         return userService.findAll();
     }
 
-
     @GetMapping("/{id}")
     public UserDto showUser(@PathVariable("id") int id) {
         return userService.findById(id);

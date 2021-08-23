@@ -3,6 +3,7 @@ package ru.ntr.villagemarket.model.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.ntr.villagemarket.config.AppProperties;
+import ru.ntr.villagemarket.model.dto.product.FullInfoProductDto;
 import ru.ntr.villagemarket.model.dto.product.ProductDto;
 import ru.ntr.villagemarket.model.entity.ProductCategory;
 import ru.ntr.villagemarket.model.entity.Product;
@@ -28,14 +29,14 @@ public class ProductMapper {
                         .collect(Collectors.toList()))
                 .description(productDto.getDescription())
                 .imgLink(productDto.getImgLink() == null || productDto.getImgLink().isBlank()
-                        ? AppProperties.IMG_CATALOG + AppProperties.DEFAULT_IMAGE
+                        ? AppProperties.imgCatalog + AppProperties.defaultImage
                         : productDto.getImgLink())
                 .availableForSale(productDto.isAvailableForSale())
                 .build();
 
     }
 
-    public ProductDto fromProduct(Product product) {
+    public ProductDto fromProduct(Product product ) {
 
         return ProductDto.builder()
                 .id(product.getId())
@@ -46,13 +47,30 @@ public class ProductMapper {
                 .price(product.getPrice())
                 .description(product.getDescription())
                 .imgLink(product.getImgLink() == null || product.getImgLink().isBlank()
-                        ? AppProperties.IMG_CATALOG + AppProperties.DEFAULT_IMAGE
+                        ? AppProperties.imgCatalog + AppProperties.defaultImage
+                        : product.getImgLink())
+                .availableForSale(product.isAvailableForSale())
+                .build();
+    }
+    public FullInfoProductDto toManagerProductDto(Product product) {
+
+        return FullInfoProductDto.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .categories(product.getCategories().stream()
+                        .map(ProductCategory::getName)
+                        .collect(Collectors.toList()))
+                .price(product.getPrice())
+                .description(product.getDescription())
+                .imgLink(product.getImgLink() == null || product.getImgLink().isBlank()
+                        ? AppProperties.imgCatalog + AppProperties.defaultImage
                         : product.getImgLink())
                 .availableForSale(product.isAvailableForSale())
                 .build();
     }
 
     public List<Product> toProducts(List<ProductDto> productDtoList) {
+
         return productDtoList.stream()
                 .map(this::toProduct)
                 .sorted(Comparator.comparing(Product::getName))

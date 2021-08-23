@@ -25,12 +25,13 @@ public class Cart {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     User user;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "carts_products",
             joinColumns = @JoinColumn(name = "cart_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"),
-            foreignKey = @ForeignKey(name = "fk_carts_products_carts")
+            foreignKey = @ForeignKey(name = "fk_carts_products_carts"
+            )
     )
     private List<Product> products;
 

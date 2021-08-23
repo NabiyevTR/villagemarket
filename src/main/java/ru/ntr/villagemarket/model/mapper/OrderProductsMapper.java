@@ -31,7 +31,6 @@ public class OrderProductsMapper {
         return CartDto.builder()
                 .cart(fromProductList(cart.getProducts()))
                 .build();
-
     }
 
     public List<ProductItem> fromProductList(List<Product> productList) {

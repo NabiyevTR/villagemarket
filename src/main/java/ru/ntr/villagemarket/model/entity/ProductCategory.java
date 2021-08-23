@@ -30,4 +30,5 @@ public class ProductCategory {
             foreignKey = @ForeignKey(name = "fk_products_categories_products")
     )
     List<Product> products;
+
 }

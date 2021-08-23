@@ -1,8 +1,9 @@
 package ru.ntr.villagemarket.exceptions;
 
+import lombok.Getter;
+import static ru.ntr.villagemarket.exceptions.ErrorMessages.USER_WITH_SUCH_EMAIL_EXISTS_EXCEPTION;
+
 public class UserWithSuchEmailExistsException extends RuntimeException {
-    @Override
-    public String getMessage() {
-        return "User with such email exists";
-    }
+    @Getter
+    private final String message =USER_WITH_SUCH_EMAIL_EXISTS_EXCEPTION.toString();
 }

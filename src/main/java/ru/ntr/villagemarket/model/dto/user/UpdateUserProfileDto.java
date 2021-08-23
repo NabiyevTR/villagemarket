@@ -4,22 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.ntr.villagemarket.model.dto.order.OrderDto;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
 @Builder
-public class UserRegDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class UpdateUserProfileDto {
 
-    private String username;
-    private String password;
     private String firstName;
     private String lastName;
     private Date birthDate;
     private char gender;
     private String address;
-    private String comments;
     private String phoneNumber;
     private String email;
 

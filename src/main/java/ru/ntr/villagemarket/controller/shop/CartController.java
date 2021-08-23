@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/cart")
 @Slf4j
 @RequiredArgsConstructor
-@Secured({"ROLE_CUSTOMER", "ROLE_MANAGER", "ROLE_ADMIN", "ROLE_SUPER"})
+@Secured({"ROLE_CUSTOMER", "ROLE_MANAGER", "ROLE_ADMIN", "ROLE_SUPERADMIN"})
 
 public class CartController {
 

@@ -26,7 +26,6 @@ public class SecurityServiceImpl implements SecurityService {
         keyPair =appProperties.getKeyPair();
     }
 
-
     @Override
     public String verifyJwt(String jwt) {
 

@@ -7,4 +7,5 @@ public interface SecurityService {
     String verifyJwt(String jwt);
 
     String createJwtToken(Authentication authenticate);
+
 }

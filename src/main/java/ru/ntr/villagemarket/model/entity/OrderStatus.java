@@ -20,4 +20,5 @@ public class OrderStatus {
 
     @OneToMany(mappedBy="orderStatus", fetch = FetchType.LAZY)
     private List<OrderHistoryItem> history;
+
 }

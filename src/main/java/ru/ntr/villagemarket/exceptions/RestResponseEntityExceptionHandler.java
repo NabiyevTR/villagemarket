@@ -44,4 +44,23 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
+    @ExceptionHandler(value = {
+            NoSuchOrderException.class
+    })
+    protected ResponseEntity<Object> handleOrderErrors(RuntimeException ex, WebRequest request) {
+        Response response = new ErrorResponse(ex.getMessage());
+        return handleExceptionInternal(ex, response,
+                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(value = {
+            NoSuchProductException.class
+    })
+    protected ResponseEntity<Object> handleProductErrors(RuntimeException ex, WebRequest request) {
+        Response response = new ErrorResponse(ex.getMessage());
+        return handleExceptionInternal(ex, response,
+                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+
 }

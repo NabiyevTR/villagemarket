@@ -21,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -71,10 +72,10 @@ public class User {
     )
     private List<Role> roles;
 
-
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     Cart cart;
 
     @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
     private List<Order> orders;
+
 }
