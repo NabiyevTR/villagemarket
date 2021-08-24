@@ -26,6 +26,32 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="create orders_status table" author="NTR">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="orders_status"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="orders_status">
+
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="orders_status"/>
+        </rollback>
+
+    </changeSet>
+
     <changeSet id="add status_id, address, phone number, email, first name, last name to orders table" author="NTR">
         <preConditions onFail="MARK_RAN">
            <tableExists tableName="orders" />
@@ -64,31 +90,7 @@
 
     </changeSet>
 
-    <changeSet id="create orders_status table" author="NTR">
 
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="orders_status"/>
-            </not>
-        </preConditions>
-
-        <createTable tableName="orders_status">
-
-            <column name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-
-            <column name="status" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
-
-        </createTable>
-
-        <rollback>
-            <dropTable tableName="orders_status"/>
-        </rollback>
-
-    </changeSet>
 
     <changeSet id="create orders_history table" author="NTR">
 
@@ -190,7 +192,7 @@
                                  baseColumnNames="cart_id"
                                  constraintName="fk_carts_products_cart"
                                  referencedTableName="carts"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="user_id"/>
 
         <addForeignKeyConstraint baseTableName="carts_products"
                                  baseColumnNames="product_id"
