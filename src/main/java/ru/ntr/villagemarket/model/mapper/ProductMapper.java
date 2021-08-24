@@ -17,7 +17,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductMapper {
 
+    private final AppProperties appProperties;
     private final CategoryRepository categoryRepository;
+
 
     public Product toProduct(ProductDto productDto) {
 
@@ -29,7 +31,7 @@ public class ProductMapper {
                         .collect(Collectors.toList()))
                 .description(productDto.getDescription())
                 .imgLink(productDto.getImgLink() == null || productDto.getImgLink().isBlank()
-                        ? AppProperties.imgCatalog + AppProperties.defaultImage
+                        ? appProperties.getImgCatalog() + appProperties.getDefaultImage()
                         : productDto.getImgLink())
                 .availableForSale(productDto.isAvailableForSale())
                 .build();
@@ -47,7 +49,7 @@ public class ProductMapper {
                 .price(product.getPrice())
                 .description(product.getDescription())
                 .imgLink(product.getImgLink() == null || product.getImgLink().isBlank()
-                        ? AppProperties.imgCatalog + AppProperties.defaultImage
+                        ? appProperties.getImgCatalog() + appProperties.getDefaultImage()
                         : product.getImgLink())
                 .availableForSale(product.isAvailableForSale())
                 .build();
@@ -63,7 +65,7 @@ public class ProductMapper {
                 .price(product.getPrice())
                 .description(product.getDescription())
                 .imgLink(product.getImgLink() == null || product.getImgLink().isBlank()
-                        ? AppProperties.imgCatalog + AppProperties.defaultImage
+                        ? appProperties.getImgCatalog() + appProperties.getDefaultImage()
                         : product.getImgLink())
                 .availableForSale(product.isAvailableForSale())
                 .build();
