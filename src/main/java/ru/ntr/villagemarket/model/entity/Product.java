@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.ntr.villagemarket.config.AppProperties;
 
 import javax.persistence.*;
 import java.util.*;
@@ -16,11 +15,6 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
-
-    @Transient
-    private static final String IMG_CATALOG = AppProperties.imgCatalog;
-    @Transient
-    private static final String DEFAULT_IMAGE = AppProperties.defaultImage;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

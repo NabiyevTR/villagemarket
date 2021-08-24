@@ -19,6 +19,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
+    //Properties
+    private final AppProperties appProperties;
+
     // Mappers
     private final OrderMapper orderMapper;
     private final OrderHistoryMapper orderHistoryMapper;
@@ -145,7 +148,7 @@ public class OrderServiceImpl implements OrderService {
         var currentDate = new Date();
         var calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
-        calendar.add(Calendar.DATE, AppProperties.daysForDelivery);
+        calendar.add(Calendar.DATE, appProperties.getDaysForDelivery());
         return calendar.getTime();
     }
 
