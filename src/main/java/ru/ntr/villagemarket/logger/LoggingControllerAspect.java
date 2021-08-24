@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
@@ -13,7 +14,10 @@ import ru.ntr.villagemarket.config.AppProperties;
 
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class LoggingControllerAspect {
+
+    private final AppProperties appProperties;
 
     private static final Logger log = LogManager.getLogger(LoggingControllerAspect.class);
     private final ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
@@ -25,7 +29,7 @@ public class LoggingControllerAspect {
     @Before("controllerLogger()")
     public void before(JoinPoint joinPoint) {
 
-        if (!AppProperties.controllerLogging) return;
+        if (!appProperties.isControllerLogging()) return;
 
         try {
             log.info(
@@ -44,7 +48,7 @@ public class LoggingControllerAspect {
     @AfterReturning(value = "controllerLogger()", returning = "obj")
     public void afterReturning(Object obj) {
 
-        if (!AppProperties.controllerLogging) return;
+        if (!appProperties.isControllerLogging()) return;
 
         try {
             log.info(
@@ -61,7 +65,7 @@ public class LoggingControllerAspect {
     @AfterThrowing(value = "controllerLogger()", throwing = "e")
     public void afterThrow(JoinPoint joinPoint, Throwable e) {
 
-        if (!AppProperties.controllerLogging) return;
+        if (!appProperties.isControllerLogging()) return;
 
         log.error("Error: ", e.getClass().getName());
     }

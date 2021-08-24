@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderMapper {
 
+    private final AppProperties appProperties;
+
     private final OrderStatusRepository orderStatusRepository;
 
     private final OrderProductsMapper orderProductsMapper;
@@ -147,7 +149,7 @@ public class OrderMapper {
         var currentDate = new Date();
         var calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
-        calendar.add(Calendar.DATE, AppProperties.daysForDelivery);
+        calendar.add(Calendar.DATE, appProperties.daysForDelivery);
         return calendar.getTime();
     }
 
