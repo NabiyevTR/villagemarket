@@ -9,6 +9,8 @@ import org.springframework.context.annotation.PropertySource;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.*;
@@ -26,14 +28,11 @@ public class AppProperties {
     @Getter
     private KeyPair keyPair;
 
-    @Value("${market.resourcePath}")
-    private String resourcePath;
+    @Value("${market.publicKeyUrl}")
+    private String publicKeyUrl;
 
-    @Value("${market.publicKeyPath}")
-    private String publicKeyPath;
-
-    @Value("${market.privateKeyPath}")
-    private String privateKeyPath;
+    @Value("${market.privateKeyUrl}")
+    private String privateKeyUrl;
 
     @Value("${market.imgCatalog}")
     public String imgCatalog;
@@ -55,7 +54,9 @@ public class AppProperties {
 
     private PublicKey loadPublicKey() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
 
-        String publicKeyContent = new String(Files.readAllBytes(Paths.get(new File(resourcePath).getAbsolutePath(), publicKeyPath)));
+        URL url = new URL(publicKeyUrl);
+        String publicKeyContent = new String(url.openStream().readAllBytes());
+
         publicKeyContent = publicKeyContent
                 .replaceAll("\\r", "")
                 .replaceAll("\\n", "")
@@ -69,7 +70,9 @@ public class AppProperties {
 
     private PrivateKey loadPrivateKey() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
 
-        String privateKeyContent = new String(Files.readAllBytes(Paths.get(new File(resourcePath).getAbsolutePath(), privateKeyPath)));
+        URL url = new URL(privateKeyUrl);
+        String privateKeyContent = new String(url.openStream().readAllBytes());
+
         privateKeyContent = privateKeyContent
                 .replaceAll("\\r", "")
                 .replaceAll("\\n", "")
@@ -81,8 +84,10 @@ public class AppProperties {
         return kf.generatePrivate(keySpecPKCS8);
     }
 
+
     public void loadKeyPair() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
         keyPair = new KeyPair(loadPublicKey(), loadPrivateKey());
     }
+
 }
 

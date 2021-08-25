@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @AllArgsConstructor
 
-@ToString
+
 public enum  ErrorMessages {
     CURRENT_USER_DELETE_EXCEPTION ("Cannot delete yourself. Operation denied"),
     NO_CURRENT_USER_EXCEPTION("Cannot get current user"),
@@ -20,4 +20,10 @@ public enum  ErrorMessages {
 
 
     private String message;
+
+
+    @Override
+    public String toString() {
+        return message;
+    }
 }
